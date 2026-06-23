@@ -300,8 +300,10 @@ musicBtn.addEventListener('click',e=>{ e.stopPropagation(); playing?stopMusic():
 /* 默认打开：浏览器禁止无交互自动播放，故在首次任意交互(点/触/滚/键)时自动开启一次 */
 let autoStarted=false;
 function autoStart(){ if(autoStarted) return; autoStarted=true; startMusic();
-  ['pointerdown','touchstart','keydown','wheel'].forEach(ev=>removeEventListener(ev,autoStart)); }
-['pointerdown','touchstart','keydown','wheel'].forEach(ev=>addEventListener(ev,autoStart,{passive:true,once:false}));
+  ['scroll','wheel','touchmove','pointerdown','touchstart','keydown'].forEach(ev=>removeEventListener(ev,autoStart)); }
+/* 滑动即触发：滚动(scroll)、滚轮(wheel)、触屏拖动(touchmove)都算，外加点/触/键兜底。
+   注：浏览器禁止无交互自动播放，所以必须挂在用户首次交互上；scroll 正是“滑动”最直接的信号。 */
+['scroll','wheel','touchmove','pointerdown','touchstart','keydown'].forEach(ev=>addEventListener(ev,autoStart,{passive:true}));
 </script>
 </body>
 </html>
